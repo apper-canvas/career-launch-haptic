@@ -9,6 +9,11 @@ import NotificationBell from './components/NotificationBell';
 // Pages
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import RecruiterDashboard from './pages/recruiter/RecruiterDashboard';
+import JobManagement from './pages/recruiter/JobManagement';
+import ApplicantTracking from './pages/recruiter/ApplicantTracking';
+import EmailTemplates from './pages/recruiter/EmailTemplates';
+import InterviewScheduler from './pages/recruiter/InterviewScheduler';
 import NotificationPreferences from './pages/NotificationPreferences';
 
 // Component for the theme toggle
@@ -87,6 +92,7 @@ const Header = () => {
             <li><a href="#" className="font-medium hover:text-primary transition-colors">Home</a></li>
             <li><a href="#jobs" className="font-medium hover:text-primary transition-colors">Find Jobs</a></li>
             <li><a href="#" className="font-medium hover:text-primary transition-colors">About</a></li>
+            <li><a href="/recruiter/dashboard" className="font-medium hover:text-primary transition-colors">Recruiter Dashboard</a></li>
           </ul>
         </nav>
         <div className="flex items-center">
@@ -154,8 +160,13 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/notification-preferences" element={<NotificationPreferences />} />
+            <Route path="/recruiter/dashboard" element={<RecruiterDashboard />} />
+            <Route path="/recruiter/jobs" element={<JobManagement />} />
+            <Route path="/recruiter/applicants" element={<ApplicantTracking />} />
+            <Route path="/recruiter/email-templates" element={<EmailTemplates />} />
+            <Route path="/recruiter/interviews" element={<InterviewScheduler />} />
               <Route path="*" element={<NotFound />} />
-          </Routes>
+            </Routes>
         </AnimatePresence>
       </main>
       <Footer />
