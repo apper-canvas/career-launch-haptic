@@ -7,8 +7,8 @@ import { RecruiterProvider } from './context/RecruiterContext';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <App />
-      <RecruiterProvider>
-        <App />
-      </RecruiterProvider>
+    <RecruiterProvider>
+      <App />
+    </RecruiterProvider>
+  </BrowserRouter>
 )
