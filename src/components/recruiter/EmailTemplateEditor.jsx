@@ -182,7 +182,7 @@ const EmailTemplateEditor = ({ template = null, onSave, onCancel }) => {
           <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
             {placeholderVariables.map(variable => (
               <li key={variable.name} className="text-xs">
-                <span className="font-mono bg-surface-200 dark:bg-surface-600 px-1 rounded">{{variable.name}}</span>
+                <span className="font-mono bg-surface-200 dark:bg-surface-600 px-1 rounded">{`{{${variable.name}}}`}</span>
                 <span className="text-surface-500 ml-1">({variable.description})</span>
               </li>
             ))}
