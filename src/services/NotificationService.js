@@ -29,7 +29,7 @@ const EMAIL_TEMPLATES = {
     `
   },
   interviewInvitation: {
-    subject: 'You've been invited for an interview',
+    subject: 'You\'ve been invited for an interview',
     template: (data) => `
       <h2>Interview Invitation</h2>
       <p>Dear ${data.userName || 'User'},</p>
