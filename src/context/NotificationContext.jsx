@@ -7,12 +7,41 @@ const NotificationContext = createContext();
 
 // Default notification preferences
 const defaultPreferences = {
-  applicationSubmission: true,
-  applicationReview: true,
-  interviewInvitation: true,
-  applicationRejection: false,
-  jobRecommendations: true,
-  marketingEmails: false
+  notifications: {
+    applicationSubmission: {
+      enabled: true,
+      frequency: 'immediate', // immediate, daily, weekly
+      methods: ['email', 'in-app'] // email, in-app, sms
+    },
+    applicationReview: {
+      enabled: true,
+      frequency: 'immediate',
+      methods: ['email', 'in-app']
+    },
+    interviewInvitation: {
+      enabled: true,
+      frequency: 'immediate',
+      methods: ['email', 'in-app', 'sms']
+    },
+    applicationRejection: {
+      enabled: false,
+      frequency: 'daily',
+      methods: ['email']
+    },
+    jobRecommendations: {
+      enabled: true,
+      frequency: 'weekly',
+      methods: ['email']
+    },
+    marketingEmails: {
+      enabled: false,
+      frequency: 'weekly',
+      methods: ['email']
+    }
+  },
+  categories: {
+    filterByIndustry: [] // empty array means all industries
+  }
 };
 
 export function NotificationProvider({ children }) {
@@ -53,7 +82,8 @@ export function NotificationProvider({ children }) {
   // Send a notification
   const sendNotification = async (type, data) => {
     // Check if this type of notification is enabled in preferences
-    if (!preferences[type]) {
+    const notificationPrefs = preferences.notifications?.[type];
+    if (!notificationPrefs?.enabled) {
       return false;
     }
     

@@ -74,6 +74,19 @@ export const NotificationService = {
       setTimeout(() => {
         // Generate notification content based on type
         const template = EMAIL_TEMPLATES[type] || { subject: 'Notification', template: () => 'Notification content' };
+
+        // Get user preferences from localStorage
+        const preferencesStr = localStorage.getItem('notificationPreferences');
+        let notificationPrefs = {};
+        
+        if (preferencesStr) {
+          try {
+            const preferences = JSON.parse(preferencesStr);
+            notificationPrefs = preferences.notifications[type] || {};
+          } catch (error) {
+            console.error('Error parsing notification preferences', error);
+          }
+        }
         
         const newNotification = {
           id: Date.now().toString(),
@@ -82,7 +95,10 @@ export const NotificationService = {
           content: template.template(data),
           timestamp: new Date().toISOString(),
           read: false,
-          data
+          data,
+          // Add preferences info to determine how this should be delivered
+          frequency: notificationPrefs.frequency || 'immediate',
+          methods: notificationPrefs.methods || ['email', 'in-app']
         };
 
         // Get existing notifications and add the new one
@@ -93,9 +109,27 @@ export const NotificationService = {
         // Store updated notifications
         localStorage.setItem(STORAGE_KEY, JSON.stringify(notifications));
         
-        // Simulate email sending
-        console.log(`Email notification sent: ${type}`, newNotification);
-        
+        // Simulate different notification delivery methods based on preferences
+        if (newNotification.methods.includes('email')) {
+          console.log(`Email notification sent: ${type}`, {
+            to: 'user@example.com',
+            subject: newNotification.title,
+            body: newNotification.content,
+            frequency: newNotification.frequency
+          });
+        }
+
+        if (newNotification.methods.includes('sms')) {
+          console.log(`SMS notification sent: ${type}`, {
+            to: '+1234567890',
+            message: `${newNotification.title}: You have a new notification regarding your job application.`,
+            frequency: newNotification.frequency
+          });
+        }
+
+        // In-app notifications are always stored regardless of method preferences
+        // as they're managed through the notifications array
+
         resolve(newNotification);
       }, 800);
     });
