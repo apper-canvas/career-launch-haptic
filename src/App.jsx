@@ -3,10 +3,13 @@ import { Routes, Route } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getIcon } from './utils/iconUtils';
+import { NotificationProvider } from './context/NotificationContext';
+import NotificationBell from './components/NotificationBell';
 
 // Pages
 import Home from './pages/Home';
 import NotFound from './pages/NotFound';
+import NotificationPreferences from './pages/NotificationPreferences';
 
 // Component for the theme toggle
 const ThemeToggle = () => {
@@ -88,6 +91,7 @@ const Header = () => {
         </nav>
         <div className="flex items-center">
           {/* Menu button for mobile */}
+          <NotificationBell />
           <button className="md:hidden p-2 rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors">
             <span className="sr-only">Open menu</span>
             {(() => {
@@ -141,14 +145,16 @@ const Footer = () => {
 
 function App() {
   return (
-    <div className="min-h-screen flex flex-col">
-      <ThemeToggle />
-      <Header />
-      <main className="flex-grow pt-16">
-        <AnimatePresence mode="wait">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="*" element={<NotFound />} />
+    <NotificationProvider>
+      <div className="min-h-screen flex flex-col">
+        <ThemeToggle />
+        <Header />
+        <main className="flex-grow pt-16">
+          <AnimatePresence mode="wait">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/notification-preferences" element={<NotificationPreferences />} />
+              <Route path="*" element={<NotFound />} />
           </Routes>
         </AnimatePresence>
       </main>
@@ -166,7 +172,8 @@ function App() {
         theme="colored"
         toastClassName="!rounded-lg !font-medium !text-sm"
       />
-    </div>
+      </div>
+    </NotificationProvider>
   );
 }
 

@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { toast } from 'react-toastify';
 import { getIcon } from '../utils/iconUtils';
 import MainFeature from '../components/MainFeature';
+import { useNotifications } from '../context/NotificationContext';
 
 // Animation variants
 const containerVariants = {
@@ -78,6 +79,7 @@ const sampleJobs = [
 
 // Job card component
 const JobCard = ({ job }) => {
+  const { sendNotification } = useNotifications();
   const BookmarkIcon = getIcon('Bookmark');
   const MapPinIcon = getIcon('MapPin');
   const ClockIcon = getIcon('Clock');
@@ -91,9 +93,41 @@ const JobCard = ({ job }) => {
     toast.success(isSaved ? 'Job removed from saved jobs' : 'Job saved successfully!');
   };
 
-  const applyForJob = (e) => {
+  const applyForJob = async (e) => {
     e.preventDefault();
-    toast.info('Application feature will be available soon!');
+    
+    // Generate a random application ID
+    const applicationId = `APP-${Math.floor(100000 + Math.random() * 900000)}`;
+    
+    // Show loading toast
+    const loadingToastId = toast.loading("Submitting your application...");
+    
+    // Simulate API delay
+    setTimeout(async () => {
+      try {
+        // Prepare notification data
+        const notificationData = {
+          userName: "John Doe", // In a real app, this would be the current user's name
+          jobTitle: job.title,
+          company: job.company,
+          applicationId: applicationId,
+          applicationDate: new Date().toISOString()
+        };
+        
+        // Send application submission notification
+        await sendNotification('applicationSubmission', notificationData);
+        
+        // Update toast with success message
+        toast.update(loadingToastId, {
+          render: "Application submitted successfully! Check your email for confirmation.",
+          type: "success",
+          isLoading: false,
+          autoClose: 5000
+        });
+      } catch (error) {
+        toast.error("Failed to submit application. Please try again.");
+      }
+    }, 1500);
   };
 
   return (
